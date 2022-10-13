@@ -1,8 +1,16 @@
 export const x86VMState = {
-	RUNNING: Symbol("running"),
-	HALT: Symbol("halt")
+	RUNNING: 0,
+	HALT: 1
 };
 Object.freeze(x86VMState);
+
+export const x86OpCodes = {
+	JMP_16: 0xE9,
+	JMP_ABSOLUTE: 0xEA,
+	JMP_8: 0xEB,
+	HLT: 0xF4
+};
+Object.freeze(x86OpCodes);
 
 export class x86VM {
 	#state = x86VMState.HALT;
@@ -76,16 +84,22 @@ export class x86VM {
 		let opcode = fetchByte();
 
 		switch (opcode) {
-			case 0xEA:
-				this.registers.ip = x86VM.#offsetSegmentToAbsolute(fetchWord(), fetchWord());
+			case x86OpCodes.JMP_ABSOLUTE:
+				{
+					this.registers.ip = x86VM.#offsetSegmentToAbsolute(fetchWord(), fetchWord());
+				}
 				break;
-			case 0xEB:
-				let increment = fetchByte();
-				this.registers.ip += increment;
-				this.registers.ip += 2; // размер инструкции
+			case x86OpCodes.JMP_8:
+				{
+					let increment = fetchByte();
+					this.registers.ip += increment;
+					this.registers.ip += 2; // размер инструкции
+				}
 				break;
-			case 0xF4:
-				this.#state = x86VMState.HALT;
+			case x86OpCodes.HLT:
+				{
+					this.#state = x86VMState.HALT;
+				}
 				break;
 			default:
 				throw `Opcode {opcode} is not implemented yet!`;
