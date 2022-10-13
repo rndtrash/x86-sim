@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Симулятор x86</title>
+		<link rel="stylesheet" href="styles/main.css">
+		<link rel="stylesheet" href="styles/hex0r.min.css">
+		<link rel="stylesheet" href="vs/editor/editor.main.css" data-name="vs/editor/editor.main"/>
+	</head>
+
+	<body>
+		<header>
+			Меню
+		</header>
+
+		<main>
+			<div class="tab-bar vertical left">
+				<div class="tab" id="tab-files"><span class="name">Файлы</span></div>
+			</div>
+			<div id="code"></div>
+			<div class="tab-bar vertical right">
+				<div class="tab" id="tab-vm-status"><span class="name">Регистры</span></div>
+			</div>
+			<div class="tab-bar horizontal">
+				<div class="tab" id="tab-compilation-log"><span class="name">Компиляция</span></div>
+				<div class="tab" id="tab-memory"><span class="name">Оперативная память</span></div>
+			</div>
+		</main>
+
+		<footer>
+			Статус
+		</footer>
+
+		<script src="vs/loader.js"></script>
+		<script src="vs/editor/editor.main.nls.js"></script>
+		<script src="vs/editor/editor.main.js"></script>
+
+		<script src="js/cash.min.js"></script>
+		<script src="js/hex0r.min.js"></script>
+
+		<script>
+		var VM;
+		</script>
+		<script type="module" src="js/x86-assembler.js"></script>
+		<script type="module" src="js/assembly-language.js"></script>
+		<script type="module" src="js/x86-vm.js"></script>
+		<script type="module" src="js/main.js"></script>
+	</body>
+</html>

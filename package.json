@@ -1,0 +1,41 @@
+{
+  "name": "x86-sim",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "make",
+    "dist": "make dist",
+    "lint": "eslint .",
+    "dev": "npx nodemon Makefile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rndtrash/x86-sim.git"
+  },
+  "author": "rndtrash",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rndtrash/x86-sim/issues"
+  },
+  "homepage": "https://github.com/rndtrash/x86-sim#readme",
+  "dependencies": {
+    "clean-css-cli": "^5.6.1",
+    "eslint": "^8.23.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "html-minifier": "^4.0.0",
+    "nodemon": "^2.0.20",
+    "uglify-js": "^3.17.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
