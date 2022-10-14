@@ -1,3 +1,3 @@
-# Оглавление
+# Table of Contents
 
- 1. [Полезные ссылки](./links.md)
+ 1. [Useful links](links.md)

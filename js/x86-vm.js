@@ -1,3 +1,5 @@
+import { $l } from './l10n.js';
+
 export const x86VMState = {
 	RUNNING: 0,
 	HALT: 1
@@ -14,7 +16,7 @@ Object.freeze(x86OpCodes);
 
 export class x86VM {
 	#state = x86VMState.HALT;
-	memory = new Uint8Array(0x200); // 128 килобайт памяти хватит всем!
+	memory = new Uint8Array(0x200); // 128k of RAM is enough for everyone!
 	registers = {
 		ax: 0,
 		bx: 0,
@@ -35,13 +37,13 @@ export class x86VM {
 
 	load(program) {
 		if (program.length > this.memory.length)
-			throw "Программа слишком большая!";
+			throw $l('vm.error.program-too-big', program.length - this.memory.length);
 		this.memory.set(program);
 	}
 
 	reset() {
 		this.registers.ip = 0xFFFF0;
-		// Остальные регистры оставим как есть для симуляции оставшегося в памяти рандомного мусора
+		// Let's leave the other registers as-is to simulate the random garbage at the start
 	}
 
 	run() {
@@ -62,15 +64,15 @@ export class x86VM {
 	}
 
 	#fetchByte(address) {
-		address &= 0xFFFFF; // подгоняем под 20 бит
+		address &= 0xFFFFF; // Using only 20 bit of the address
 		if (address < this.memory.length)
 			return this.memory[address];
-		if (address >= 0xFFFF0)
+		if (address >= 0xFFFF0) // If we're at the reset vector FFFF:0000...
 		{
-			const bootcode = new Uint8Array([0xEA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]); // Простейший BIOS, прыгает на начало кода
+			const bootcode = new Uint8Array([0xEA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]); // Simple BIOS that jumps straight to 0000:0000
 			return bootcode[address & 0xF];
 		}
-		throw 'Invalid address!';
+		throw $l('vm.error.invalid-address', address);
 	}
 
 	static #offsetSegmentToAbsolute(offset, segment) {
@@ -93,7 +95,7 @@ export class x86VM {
 				{
 					let increment = fetchByte();
 					this.registers.ip += increment;
-					this.registers.ip += 2; // размер инструкции
+					this.registers.ip += 2; // size of the instruction
 				}
 				break;
 			case x86OpCodes.HLT:
@@ -102,7 +104,7 @@ export class x86VM {
 				}
 				break;
 			default:
-				throw `Opcode {opcode} is not implemented yet!`;
+				throw $l('vm.error.opcode-not-implemented', opcode);
 		}
 	}
 }

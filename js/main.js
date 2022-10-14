@@ -1,12 +1,17 @@
+import { setLanguage, $l } from './l10n.js';
 import { x86VM } from "./x86-vm.js";
 import { registerAssemblyLanguage, assemblyLangId } from "./assembly-language.js";
 import { x86Assembler } from "./x86-assembler.js";
 
 /*var */VM = null;
 var editor = null;
+/*var */assembler = null;
 
 function init() {
+	setLanguage(window.navigator.language);
+
 	VM = new x86VM();
+	assembler = new x86Assembler();
 
 	monaco.editor.defineTheme('x86-sim-theme', {
 		base: 'vs',
@@ -26,7 +31,7 @@ function init() {
 	});
 	registerAssemblyLanguage();
 	editor = monaco.editor.create(document.getElementById('code'), {
-		value: '# hello, world!\nstart:mov 7000h, ax #move 0x7000 to the AX register\n\thlt',
+		value: $l('example-code'),
 		language: assemblyLangId,
 		theme: 'x86-sim-theme',
 		automaticLayout: true

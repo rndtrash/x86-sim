@@ -1,0 +1,80 @@
+// NOT FINAL!
+
+digraph finite_state_machine {
+	rankdir=LR;
+    charset="UTF-8";
+	//size="8,5"
+
+	node [shape = doublecircle];
+    Q7;
+    Q6;
+    Qerr;
+    Qerr1;
+    Qerr2;
+
+	node [shape = circle];
+
+    Q1 [ label = "Number neg" ];
+    Q2 [ label = "Number *" ];
+    Q3 [ label = "Number 0 *" ];
+    Q4 [ label = "Literal *" ];
+    Q5 [ label = "Comment *" ];
+    Q6 [ label = "Comma *" ];
+    Q7 [ label = "Label *" ];
+    Q8 [ label = "Number+base *" ];
+    Q9 [ label = "Base16 or literal" ];
+    Q10 [ label = "Number+base postfix *" ];
+    Q11 [ label = "Number+base16 *" ];
+    Q12 [ label = "Number neg+base16" ];
+    Q13 [ label = "Number+base prefix *" ];
+
+    Qerr1 [ label = "Qerr" ];
+    Qerr2 [ label = "Qerr" ];
+
+    // Пробелы
+    Q0 -> Q0 [ xlabel = "Whitespace, Tab" ];
+
+    Q0 -> Q9 [ xlabel = "$" ];
+    // Литералы-метки, начинающиеся с доллара
+    Q9 -> Q4 [ label = "A-Z a-z А-ЯЁ а-яё _" ];
+    // Шестнадцатеричные числа вида $0...
+    { Q9 Q12 } -> Q11 [ xlabel = "0" ];
+    Q11 -> Q11 [ label = "0-9 A-Fa-f" ];
+
+    // Запятая
+    Q0 -> Q6 [ label = "," ];
+
+    // Комментарий
+    Q0 -> Q5 [ xlabel = "#;" ];
+    Q5 -> Q5 [ xlabel = "*" ];
+
+    // Литерал
+    Q0 -> Q4 [ label = "A-Z a-z А-ЯЁ а-яё _" ];
+    Q4 -> Q4 [ label = "A-Z a-z А-ЯЁ а-яё 0-9 _" ];
+    // Метка
+    Q4 -> Q7 [ label = ":" ];
+
+    // Отрицательные числа
+    Q0 -> Q1 [ xlabel = "-" ];
+    // Шестнадцатеричные числа вида $0...
+    Q1 -> Q12 [ xlabel = "$" ];
+    // Число
+    { Q0 Q1 } -> Q2 [ label = "1-9 A-Fa-f" ];
+    { Q2 Q3 } -> Q2 [ label = "0-9 A-Fa-f" ];
+    // Число с постфиксом
+    Q2 -> Q10 [ label = "DdHhOoQqTtXxYy" ];
+
+    // Число 0
+    {Q0 Q1} -> Q3 [ xlabel = "0" ];
+    // Число с префиксом системы исчисления
+    Q3 -> Q8 [ label = "DdHhOoQqTtXxYy" ];
+    { Q8 Q13 } -> Q13 [ label = "0-9 A-Fa-f" ];
+
+    // errors
+    { Q8 Q11 Q13 } -> Qerr [ xlabel = "*" ];
+
+    { Q2 Q10 Q1 } -> Qerr1 [ xlabel = "*" ];
+
+    { Q9 Q12 } -> Qerr2 [ xlabel = "*" ];
+}
+

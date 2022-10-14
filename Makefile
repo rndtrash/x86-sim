@@ -24,7 +24,7 @@ dist/styles/%.css: src/styles/%.css
 	mkdir -p dist/styles
 	npx clean-css-cli $< -o $@
 
-js: dist/js/x86-assembler.js dist/js/assembly-language.js dist/js/x86-vm.js dist/js/main.js
+js: dist/js/l10n.js dist/js/x86-assembler.js dist/js/assembly-language.js dist/js/x86-vm.js dist/js/main.js
 
 dist/js/%.js: js/%.js
 	mkdir -p dist/js

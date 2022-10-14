@@ -1,3 +1,5 @@
+import { x86AssemblerRegularExpressions } from "./x86-assembler.js";
+
 export const assemblyLangId = 'assembly';
 const keywords = ['mov', 'nop', 'hlt', 'db'];
 const registers = ['ax', 'bx', 'cx', 'dx', 'ah', 'al', 'bh', 'bl', 'ch', 'cl', 'dh', 'dl'];
@@ -12,8 +14,8 @@ export function registerAssemblyLanguage() {
 		registers: registers,
 		tokenizer: {
 			root: [
-				[/[a-zA-Zа-яёА-ЯЁ_][a-zA-Zа-яёА-ЯЁ_\d]*:/, 'label'],
-				[/[a-zA-Z_][a-zA-Z_\d]*/, {
+				[new RegExp(x86AssemblerRegularExpressions.label), 'label'],
+				[new RegExp(x86AssemblerRegularExpressions.literal), {
 					cases: {
 						'@keywords': 'keyword',
 						'@registers': 'register',
@@ -21,8 +23,8 @@ export function registerAssemblyLanguage() {
 					}
 				}
 				],
-				[/-?(0[box][0-9]+|[0-9]+[bdho]?)/, 'number'],
-				[/(^#.*$)/, 'comment']
+				[new RegExp(x86AssemblerRegularExpressions.number), 'number'],
+				[new RegExp(x86AssemblerRegularExpressions.comment), 'comment']
 			]
 		}
 	});

@@ -73,13 +73,6 @@ div#code {
     grid-area: main;
 }
 
-/* TODO: skin for Monaco
-div#code::selection {
-    background-color: var(--theme-code-selection-background);
-    color: var(--theme-code-selection-foreground);
-}
-*/
-
 div.tab-bar {
     display: flex;
     flex-wrap: nowrap;
