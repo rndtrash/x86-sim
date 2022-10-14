@@ -14,16 +14,14 @@ const translations = {
 	}
 };
 
-const defaultLanguage = 'en-US';
-var language = defaultLanguage;
+const DEFAULT_LANGUAGE = 'en-US';
+let language = DEFAULT_LANGUAGE;
 
 export function setLanguage(lang) {
-	if (translations[lang] === undefined)
-		lang = defaultLanguage;
-	language = lang;
+    language = translations.hasOwnProperty(lang) ? lang: DEFAULT_LANGUAGE;
 }
 
-export function $l(string, ...args) {
-	// god gracious why doesnt js have something like sprintf
-	return args.reduce((p, c) => p.replace(/(?<!\\)(?:\\\\)*%/, `${c}`), translations[language][string] || translations[defaultLanguage][string]);
+export function $l(id, ...args) {
+    const str = translations[language][id] || translations[DEFAULT_LANGUAGE][id];
+    return str.replace(/(?<!\\)(?:\\\\)*%/g, () => args.shift()).replace(/\\%/g, '%');
 }
