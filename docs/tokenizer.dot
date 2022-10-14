@@ -1,80 +1,91 @@
-// NOT FINAL!
-
 digraph finite_state_machine {
-	rankdir=LR;
-    charset="UTF-8";
-	//size="8,5"
+    rankdir = LR
+    charset = "UTF-8"
 
-	node [shape = doublecircle];
-    Q7;
-    Q6;
-    Qerr;
-    Qerr1;
-    Qerr2;
+    node [shape = doublecircle]
 
-	node [shape = circle];
+    //Q2
+    Q10
+    Q11
+    Qerr
+    //Qerr1
+    //Qerr2
+    Qerr3
+    Qerr4
 
-    Q1 [ label = "Number neg" ];
-    Q2 [ label = "Number *" ];
-    Q3 [ label = "Number 0 *" ];
-    Q4 [ label = "Literal *" ];
-    Q5 [ label = "Comment *" ];
-    Q6 [ label = "Comma *" ];
-    Q7 [ label = "Label *" ];
-    Q8 [ label = "Number+base *" ];
-    Q9 [ label = "Base16 or literal" ];
-    Q10 [ label = "Number+base postfix *" ];
-    Q11 [ label = "Number+base16 *" ];
-    Q12 [ label = "Number neg+base16" ];
-    Q13 [ label = "Number+base prefix *" ];
+    node [shape = circle]
 
-    Qerr1 [ label = "Qerr" ];
-    Qerr2 [ label = "Qerr" ];
+    // State labels
+    Q1 [ label = "Literal*" ]
+    //Q2 [ label = "Label*" ]
+    Q3 [ label = "Dollar sign" ]
+    Q4 [ label = "Number base16*" ]
+    Q5 [ label = "Zero*" ]
+    Q6 [ label = "Number*" ]
+    Q7 [ label = "Number basePostfix*" ]
+    Q8 [ label = "Zero basePostfix*" ]
+    Q9 [ label = "Number basePrefix*" ]
+    Q10 [ label = "Comma*" ]
+    Q11 [ label = "Colon*" ]
 
-    // Пробелы
-    Q0 -> Q0 [ xlabel = "Whitespace, Tab" ];
+    //Qerr1 [ label = "Qerr" ]
+    //Qerr2 [ label = "Qerr" ]
+    Qerr3 [ label = "Qerr" ]
+    Qerr4 [ label = "Qerr" ]
 
-    Q0 -> Q9 [ xlabel = "$" ];
-    // Литералы-метки, начинающиеся с доллара
-    Q9 -> Q4 [ label = "A-Z a-z А-ЯЁ а-яё _" ];
-    // Шестнадцатеричные числа вида $0...
-    { Q9 Q12 } -> Q11 [ xlabel = "0" ];
-    Q11 -> Q11 [ label = "0-9 A-Fa-f" ];
+    // Starting point
+    Q0 -> Q0 [ label = "Whitespace, Tab" ]
 
-    // Запятая
-    Q0 -> Q6 [ label = "," ];
+    // Literal
+    Q0 -> Q1 [ label = "A-Za-z А-ЯЁа-яё _ ." ]
+    Q1 -> Q1 [ label = "A-Za-z А-ЯЁа-яё _ . 0-9" ]
+    Q3 -> Q1 [ label = "A-Za-z А-ЯЁа-яё _ ." ]
 
-    // Комментарий
-    Q0 -> Q5 [ xlabel = "#;" ];
-    Q5 -> Q5 [ xlabel = "*" ];
+    // Label
+    //Q1 -> Q2 [ xlabel = ":" ]
 
-    // Литерал
-    Q0 -> Q4 [ label = "A-Z a-z А-ЯЁ а-яё _" ];
-    Q4 -> Q4 [ label = "A-Z a-z А-ЯЁ а-яё 0-9 _" ];
-    // Метка
-    Q4 -> Q7 [ label = ":" ];
+    // Dollar sign
+    Q0 -> Q3 [ xlabel = "$" ]
 
-    // Отрицательные числа
-    Q0 -> Q1 [ xlabel = "-" ];
-    // Шестнадцатеричные числа вида $0...
-    Q1 -> Q12 [ xlabel = "$" ];
-    // Число
-    { Q0 Q1 } -> Q2 [ label = "1-9 A-Fa-f" ];
-    { Q2 Q3 } -> Q2 [ label = "0-9 A-Fa-f" ];
-    // Число с постфиксом
-    Q2 -> Q10 [ label = "DdHhOoQqTtXxYy" ];
+    // Numbers
 
-    // Число 0
-    {Q0 Q1} -> Q3 [ xlabel = "0" ];
-    // Число с префиксом системы исчисления
-    Q3 -> Q8 [ label = "DdHhOoQqTtXxYy" ];
-    { Q8 Q13 } -> Q13 [ label = "0-9 A-Fa-f" ];
+    // $0 Hexadecimal
+    Q3 -> Q4 [ label = "0" ]
+    Q4 -> Q4 [ label = "0-9 A-Fa-f" ]
 
-    // errors
-    { Q8 Q11 Q13 } -> Qerr [ xlabel = "*" ];
+    // Zero
+    Q0 -> Q5 [ label = "0" ]
 
-    { Q2 Q10 Q1 } -> Qerr1 [ xlabel = "*" ];
+    // Regular number
+    Q0 -> Q6 [ xlabel = "1-9 A-Fa-f" ]
+    Q5 -> Q6 [ xlabel = "0-9 A-Fa-f" ]
+    Q6 -> Q6 [ label = "0-9 A-Fa-f" ]
 
-    { Q9 Q12 } -> Qerr2 [ xlabel = "*" ];
+    // Number with postfix base
+    Q6 -> Q7 [ label = "BDHOQTY bdhoqty" ]
+
+    // Zero with base
+    Q5 -> Q8 [ label = "BDHOQTY bdhoqty" ]
+
+    // Number with prefix base
+    Q8 -> Q9 [ label = "0-9 A-Fa-f" ]
+    Q9 -> Q9 [ label = "0-9 A-Fa-f" ]
+
+    // Comma
+    Q0 -> Q10 [ label = "," ]
+
+    // Colon
+    Q0 -> Q11 [ label = ":" ]
+
+    // Errors
+    { Q0 Q3 } -> Qerr [ label = "*" ]
+
+    //Q3 -> Qerr1 [ label = "*" ]
+
+    Q4 -> Qerr [ label = "A-Za-z А-ЯЁа-яё _ ." ]
+
+    { Q5 Q8 Q9 } -> Qerr3 [ label = "A-Za-z А-ЯЁа-яё _ ." ]
+
+    { Q6 Q7 } -> Qerr4 [ label = "A-Za-z А-ЯЁа-яё _ ." ]
 }
 
