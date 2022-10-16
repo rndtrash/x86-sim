@@ -1,9 +1,17 @@
 NAME=x86-sim
 7ZA?=7za
+DOT?=dot
 
-.PHONY: all clean html css js static dist dev
+.PHONY: all clean html css js static dist dev docs dot
 
 all: html css js static dist/vs
+
+docs: dot
+
+dot: docs/tokenizer.dot.svg
+
+%.dot.svg: %.dot
+	$(DOT) $< -Tsvg -O
 
 dist: all
 	pushd dist; $(7ZA) a ../$(NAME).zip *
