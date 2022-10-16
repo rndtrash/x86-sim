@@ -14,8 +14,8 @@ export function registerAssemblyLanguage() {
 		registers: registers,
 		tokenizer: {
 			root: [
-				[new RegExp(x86AssemblerRegularExpressions.label), 'label'],
-				[new RegExp(x86AssemblerRegularExpressions.literal), {
+				[x86AssemblerRegularExpressions.label, 'label'],
+				[x86AssemblerRegularExpressions.literal, {
 					cases: {
 						'@keywords': 'keyword',
 						'@registers': 'register',
@@ -23,8 +23,8 @@ export function registerAssemblyLanguage() {
 					}
 				}
 				],
-				[new RegExp(x86AssemblerRegularExpressions.number), 'number'],
-				[new RegExp(x86AssemblerRegularExpressions.comment), 'comment']
+				[x86AssemblerRegularExpressions.number, 'number'],
+				[x86AssemblerRegularExpressions.comment, 'comment']
 			]
 		}
 	});
